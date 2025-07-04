@@ -1,0 +1,54 @@
+import java.io.*;
+import java.nio.file.*;
+
+public class FileOperations {
+
+    public static void writeToFile(String filename, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(content);
+            System.out.println(" File written successfully: " + filename);
+        } catch (IOException e) {
+            System.out.println(" Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public static void readFromFile(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            System.out.println("📖 Reading file: " + filename);
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println(" Error reading file: " + e.getMessage());
+        }
+    }
+
+    public static void modifyFile(String filename, String oldText, String newText) {
+        try {
+
+            String content = new String(Files.readAllBytes(Paths.get(filename)));
+
+            String modifiedContent = content.replace(oldText, newText);
+
+            Files.write(Paths.get(filename), modifiedContent.getBytes());
+            System.out.println(" File modified successfully.");
+        } catch (IOException e) {
+            System.out.println(" Error modifying file: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        String filename = "codtech_notes.txt";
+
+        String content = "Welcome to the CODTECH Internship Program.\n"
+                       + "Your completion certificate will be issued at the end of your internship.";
+        writeToFile(filename, content);
+
+        readFromFile(filename);
+
+        modifyFile(filename, "CODTECH", "CODTECH IT SOLUTIONS PVT. LTD");
+
+        readFromFile(filename);
+    }
+}
